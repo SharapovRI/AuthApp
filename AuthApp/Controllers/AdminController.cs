@@ -55,8 +55,8 @@ namespace AuthApp.Controllers
         public List<InfoAboutFlight> GetInfoAboutFlight(flights flight)
         {
             List<InfoAboutFlight> infoAboutFlights = new List<InfoAboutFlight>();
-            List<traveltime> listOfTimes = db.traveltime.Include(c => c.flights_has_traveltime.Where(fl =>fl.Flights_idFlights == flight.idFlights)).ThenInclude(sc => sc.flights).ToList();
-            List<stations> listOfStations = db.stations.Include(c => c.flights_has_stations.Where(fl => fl.Flights_idFlights == flight.idFlights)).ThenInclude(sc => sc.flights).ToList();
+            List<traveltime> listOfTimes = db.flights_has_traveltime.Where(e => e.Flights_idFlights == flight.idFlights).Select(e => e.traveltime).ToList();
+            List<stations> listOfStations = db.flights_has_stations.Where(e => e.Flights_idFlights == flight.idFlights).Select(e => e.stations).ToList();
             foreach (var item in listOfTimes)
             {
                 infoAboutFlights.Add(new InfoAboutFlight(flight.idFlights, listOfStations.First().Name, listOfStations.Last().Name, item.ArrivalTime, item.DepartureTime, flight));
@@ -77,6 +77,46 @@ namespace AuthApp.Controllers
             //flight.flightcrews.radiooperators = db.radiooperators.FirstOrDefault(e => e.idRadioOperators == flight.flightcrews.RadioOperatorId);
             //flight.flightcrews.flightattendants = db.flightattendants.FirstOrDefault(e => e.idFlightAttendants == flight.flightcrews.FlightAttendantsId);
             return View(flight); 
+        }
+
+        public IActionResult DetailsStations(int id)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == id);
+            if (flight != null)
+                return PartialView(flight);
+            return Accepted();
+        }
+
+        public IActionResult CrewChanging(int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            List<flightcrews> freeCrews = db.flightcrews.Where(e => e.flights == null).ToList();
+            if (flight.flightcrews != null)
+            {
+                freeCrews.Add(flight.flightcrews);
+            }
+            ViewBag.ThisFlight = flight;
+            return View(freeCrews);
+        }
+
+        
+        public async Task<IActionResult> SaveChangedCrew(int crewID, int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            flightcrews flightcrew = db.flightcrews.FirstOrDefault(e => e.idFlightCrews == crewID);
+            flight.flightcrews = flightcrew;
+            db.flights.Update(flight);
+            await db.SaveChangesAsync();
+            return RedirectToAction("EditFlight", new { flightID = flightID });
+        }
+
+        public IActionResult CrewDeleting(int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            flight.flightcrews = null;
+            db.flights.Update(flight);
+            db.SaveChanges();
+            return RedirectToAction("EditFlight", new { flightID = flightID });
         }
     }
 }

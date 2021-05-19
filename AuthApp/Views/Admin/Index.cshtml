@@ -10,6 +10,9 @@
 </head>
 <body>
     <h3>Flights</h3>
+    <div id="modDialog" class="modal fade">
+        <div id="dialogContent" class="modal-dialog"></div>
+    </div>
     <table>
         <tr>
             <td>ID</td>
@@ -20,22 +23,47 @@
             <td>Departure Date</td>
             <td>Departure Time</td>
             <td></td>
+            <td></td>
         </tr>
         @foreach (var product in Model)
         {
             <tr>
                 <td>@product.ID</td>
-                <td>@product.From</td>
+                <td>
+                    @Html.ActionLink(product.From, "DetailsStations",
+                                         new { id = product.ID }, new { @class = "compItem" })
+                </td>
                 <td>@product.To</td>
                 <td>@product.ArrDate</td>
                 <td>@product.ArrivalTime</td>
                 <td>@product.DepDate</td>
                 <td>@product.DepartureTime</td>
                 <td>
+                </td>
+                <td>
                     <a asp-controller="Admin" asp-action="EditFlight" asp-route-flightID="@product.ID">EditFlight</a>
                 </td>
             </tr>
         }
+
+
     </table>
+    @section scripts
+{
+        <script type="text/javascript">
+
+            $(function () {
+                $.ajaxSetup({ cache: false });
+                $(".compItem").click(function (e) {
+
+                    e.preventDefault();
+                    $.get(this.href, function (data) {
+                        $('#dialogContent').html(data);
+                        $('#modDialog').modal('show');
+                    });
+                });
+            })
+        </script>
+    }
 </body>
 </html>

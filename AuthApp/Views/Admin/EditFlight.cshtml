@@ -12,17 +12,49 @@
     <h3>Flights</h3>
     <div>
         <label>Number of route:</label>
-        <input value="@Model.RouteId" />
+        <label>@Model.RouteId"</label>
     </div>
     <div>
         <h3>Flight crew:</h3><br />
-        <label>Pilot: </label><label>           @Model.flightcrews.pilots.Name </label>            <label>@Model.flightcrews.pilots.Surname </label><br />
-        <label>Navigator: </label><label>       @Model.flightcrews.navigators.Name </label>        <label>@Model.flightcrews.navigators.Surname </label><br />
-        <label>Radiooperator: </label><label>   @Model.flightcrews.radiooperators.Name </label>    <label>@Model.flightcrews.radiooperators.Surname </label><br />
-        <label>Flight Attendant: </label><label>@Model.flightcrews.flightattendants.Name </label>  <label>@Model.flightcrews.flightattendants.Surname </label><br />
+        @if (Model.flightcrews != null)
+        {
+            <label>Pilot: </label>
+            @if (Model.flightcrews.pilots != null)
+            {
+                <label>           @Model.flightcrews.pilots.Name </label> <label>@Model.flightcrews.pilots.Surname </label><br />
+            }
+
+            <label>Navigator: </label>
+            @if (Model.flightcrews.navigators != null)
+            {
+                <label>       @Model.flightcrews.navigators.Name </label> <label>@Model.flightcrews.navigators.Surname </label><br />
+            }
+
+            <label>Radiooperator: </label>
+            @if (Model.flightcrews.radiooperators != null)
+            {
+                <label>   @Model.flightcrews.radiooperators.Name </label> <label>@Model.flightcrews.radiooperators.Surname </label><br />
+            }
+
+            <label>Flight Attendant: </label>
+            @if (Model.flightcrews.flightattendants != null)
+            {
+                <label>@Model.flightcrews.flightattendants.Name </label> <label>@Model.flightcrews.flightattendants.Surname </label><br />
+            }
+        }
+        else
+        {
+            <label>This flight hasn't crew</label>
+        }
     </div>
     <div>
-        
+        <a asp-action="CrewChanging" asp-route-flightID="@Model.idFlights">Change crew</a>
+    </div>
+    <div>
+        @if (Model.flightcrews != null)
+        {
+            <a asp-action="CrewDeleting" asp-route-flightID="@Model.idFlights">Delete crew</a>
+        }
     </div>
 </body>
 </html>

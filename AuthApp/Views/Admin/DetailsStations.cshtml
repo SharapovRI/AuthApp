@@ -1,0 +1,20 @@
+﻿@model AuthApp.Models.flights
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+    </div>
+    <div class="modal-body">       
+        <h4>List of stations:</h4>
+        <table>
+            @foreach (var product in Model.flights_has_stations.Select(e => e.stations))
+            {
+                <tr>
+                    <td>@product.Name</td>
+                </tr>
+            }
+
+
+        </table>        
+    </div>
+</div>
