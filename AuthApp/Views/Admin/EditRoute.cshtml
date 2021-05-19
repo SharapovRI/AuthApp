@@ -1,0 +1,38 @@
+﻿@model flights
+@{
+    //ViewData["Title"] = "Product list";
+    //Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electronics Store</title>
+</head>
+<body>
+    <h3>Flights</h3>
+    <div>
+        <label>Number of route:</label>
+        <label>@Model.RouteId</label>
+    </div>
+    <div>
+        <h3>Stations:</h3><br />
+
+        @if (Model.flights_has_stations != null)
+        {
+            @foreach (var item in Model.flights_has_stations.Select(e => e.stations).ToList())
+            {
+                <label>@item.Name    </label> <a asp-action="DeleteStation" asp-route-stationID="@item.IdStations" asp-route-flightID="@Model.idFlights">Delete</a> <br />
+            }
+        }
+
+
+        ______________________________________________________________________________________________________________________________________
+
+        <h3>Can add</h3><br />
+        @foreach (var item in ViewBag.FreeStations)
+        {
+            @item.Name  <a asp-action="AddStation" asp-route-stationID="@item.IdStations" asp-route-flightID="@Model.idFlights">Add</a><br />
+        }
+    </div>
+</body>
+</html>

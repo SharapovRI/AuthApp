@@ -12,7 +12,25 @@
     <h3>Flights</h3>
     <div>
         <label>Number of route:</label>
-        <label>@Model.RouteId"</label>
+        <label>@Model.RouteId</label>
+    </div>
+    <div>
+        <h3>Stations:</h3><br />
+        <ul>
+            @if (Model.flights_has_stations != null)
+            {
+                @foreach (var item in Model.flights_has_stations.Select(e => e.stations).ToList())
+                {
+                    <li>@item.Name</li>
+                }
+            }
+        </ul>
+        @if (Model.flights_has_stations == null)
+        {
+            <label>This flight hasn't stations</label>
+        }
+        <a asp-action="EditRoute" asp-route-flightID="@Model.idFlights">Change stations</a>
+
     </div>
     <div>
         <h3>Flight crew:</h3><br />

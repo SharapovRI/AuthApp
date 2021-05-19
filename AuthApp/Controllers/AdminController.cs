@@ -118,5 +118,34 @@ namespace AuthApp.Controllers
             db.SaveChanges();
             return RedirectToAction("EditFlight", new { flightID = flightID });
         }
+
+        public IActionResult EditRoute(int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            List<stations> a = db.stations.ToList();
+            foreach (var item in flight.flights_has_stations.Select(e => e.stations).ToList())
+            {
+                a.Remove(item);
+            }
+            ViewBag.FreeStations = a;
+            return View(flight);
+        }
+
+        public IActionResult DeleteStation(int stationID, int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            flights_has_stations flights_Has_Station = flight.flights_has_stations.FirstOrDefault(e => e.Stations_IdStations == stationID);
+            db.flights_has_stations.Remove(flights_Has_Station);
+            db.SaveChanges();
+            return RedirectToAction("EditRoute", new { flightID = flightID });
+        }
+
+        public IActionResult AddStation(int stationID, int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            db.flights_has_stations.Add(new flights_has_stations { Flights_idFlights = flightID, Stations_IdStations = stationID });
+            db.SaveChanges();
+            return RedirectToAction("EditRoute", new { flightID = flightID });
+        }
     }
 }
