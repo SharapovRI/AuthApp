@@ -1,0 +1,39 @@
+﻿@model IEnumerable<AuthApp.Models.IEmployee>
+@{
+    //ViewData["Title"] = "Product list";
+    //Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employees list</title>
+</head>
+<body>
+    <h3>Employees</h3>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>Surname</td>
+            <td>Post</td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Surname</td>
+                <td>@product.GetType().Name</td>
+                <td>
+                    <a asp-controller="Manager" asp-action="EditEmployee" asp-route-iemployee="@product.Id" asp-route-type="@product.GetType().Name">Edit</a>
+                </td>
+                <td>
+                    <a asp-controller="Manager" asp-action="Deleting" asp-route-iemployee="@product.Id" asp-route-type="@product.GetType().Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <a asp-controller="Manager" asp-action="AddNewEmployee">Add new employee</a>
+    <a asp-controller="Manager" asp-action="Index">Back</a>
+</body>
+</html>

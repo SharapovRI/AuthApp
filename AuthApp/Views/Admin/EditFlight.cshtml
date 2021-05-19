@@ -1,0 +1,28 @@
+﻿@model flights
+@{
+    //ViewData["Title"] = "Product list";
+    //Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electronics Store</title>
+</head>
+<body>
+    <h3>Flights</h3>
+    <div>
+        <label>Number of route:</label>
+        <input value="@Model.RouteId" />
+    </div>
+    <div>
+        <h3>Flight crew:</h3><br />
+        <label>Pilot: </label><label>           @Model.flightcrews.pilots.Name </label>            <label>@Model.flightcrews.pilots.Surname </label><br />
+        <label>Navigator: </label><label>       @Model.flightcrews.navigators.Name </label>        <label>@Model.flightcrews.navigators.Surname </label><br />
+        <label>Radiooperator: </label><label>   @Model.flightcrews.radiooperators.Name </label>    <label>@Model.flightcrews.radiooperators.Surname </label><br />
+        <label>Flight Attendant: </label><label>@Model.flightcrews.flightattendants.Name </label>  <label>@Model.flightcrews.flightattendants.Surname </label><br />
+    </div>
+    <div>
+        
+    </div>
+</body>
+</html>

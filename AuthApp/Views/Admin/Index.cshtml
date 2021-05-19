@@ -1,0 +1,41 @@
+﻿@model IEnumerable<AuthApp.Models.InfoAboutFlight>
+@{
+    //ViewData["Title"] = "Product list";
+    //Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electronics Store</title>
+</head>
+<body>
+    <h3>Flights</h3>
+    <table>
+        <tr>
+            <td>ID</td>
+            <td>From</td>
+            <td>To</td>
+            <td>Arrival Date</td>
+            <td>Arrival Time</td>
+            <td>Departure Date</td>
+            <td>Departure Time</td>
+            <td></td>
+        </tr>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ID</td>
+                <td>@product.From</td>
+                <td>@product.To</td>
+                <td>@product.ArrDate</td>
+                <td>@product.ArrivalTime</td>
+                <td>@product.DepDate</td>
+                <td>@product.DepartureTime</td>
+                <td>
+                    <a asp-controller="Admin" asp-action="EditFlight" asp-route-flightID="@product.ID">EditFlight</a>
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

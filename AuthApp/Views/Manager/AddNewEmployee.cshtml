@@ -1,0 +1,27 @@
+﻿@model AuthApp.ViewModels.AddNewEmployeeModel
+@using AuthApp.ViewModels
+ 
+<h2>Adding new employee</h2>
+
+<form asp-action="Adding" asp-controller="Manager" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="fo`rm-group">
+            <label asp-for="Name">Введите Name</label>
+            <input type="text" asp-for="Name" />
+            <span asp-validation-for="Name" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Surname">Введите пароль</label>
+            <input asp-for="Surname" />
+            <span asp-validation-for="Surname" />
+        </div>
+        <div class="form-group">
+            <select asp-for="Post" asp-items="Html.GetEnumSelectList<Posts>()">
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Войти" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</form>

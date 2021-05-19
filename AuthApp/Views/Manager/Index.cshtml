@@ -1,0 +1,72 @@
+﻿@model IEnumerable<AuthApp.Models.flightcrews>
+@{
+    //ViewData["Title"] = "Product list";
+    //Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crews list</title>
+</head>
+<body>
+    <h3>Crews</h3>
+    <table>
+        <tr>
+            <td>ID</td>
+            <td>Pilot</td>
+            <td>Navigator</td>
+            <td>Radiooperator</td>
+            <td>Flight attendant</td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.idFlightCrews</td>
+
+                @if (product.pilots != null)
+                {
+                    <td>@product.pilots.Name @product.pilots.Surname</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                @if (product.navigators != null)
+                {
+                    <td>@product.navigators.Name @product.navigators.Surname</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                @if (product.radiooperators != null)
+                {
+                    <td>@product.radiooperators.Name @product.radiooperators.Surname</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                @if (product.flightattendants != null)
+                {
+                    <td>@product.flightattendants.Name @product.flightattendants.Surname </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                <td>
+                    <a asp-controller="Manager" asp-action="EditCrew" asp-route-flightID="@product.idFlightCrews">Edit</a>
+                </td>
+                <td>
+                    <a asp-controller="Manager" asp-action="DeleteCrew" asp-route-flightCrewId="@product.idFlightCrews">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <a asp-controller="Manager" asp-action="AddNewCrew">Add new crew</a><br />
+    <a asp-controller="Manager" asp-action="ListOfEmployeers">View list of employeers</a>
+</body>
+</html>

@@ -1,0 +1,33 @@
+﻿@model AuthApp.ViewModels.EditCrewModel
+@using AuthApp.ViewModels
+
+<h3>Crews</h3>
+<form asp-action="EditCrewSave" asp-controller="Manager" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div>
+            <label asp-for="Id">ID: </label>
+            <label asp-for="Id">@ViewBag.Flightcrew.idFlightCrews</label>
+            <input type="number" hidden asp-for="Id" value="@ViewBag.Flightcrew.idFlightCrews" />
+        </div>
+        <div>
+            <label asp-for="Pilot">Pilot: </label>
+            <select asp-for="Pilot" asp-items="@Html.ViewBag.FreePilots"></select>
+        </div>
+        <div>
+            <label asp-for="Navigator">Navigator: </label>
+            <select asp-for="Navigator" asp-items="@ViewBag.FreeNavigators"></select>
+        </div>
+        <div>
+            <label asp-for="Radiooperator">Radiooperator: </label>
+            <select asp-for="Radiooperator" asp-items="@ViewBag.FreeRadiooperators"></select>
+        </div>
+        <div>
+            <label asp-for="Flightattendant">Flight attendant: </label>
+            <select asp-for="Flightattendant" asp-items="@ViewBag.FreeFlightattendants"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-outline-dark" />
+    </div>
+</form>
