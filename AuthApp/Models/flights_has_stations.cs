@@ -21,5 +21,7 @@ namespace AuthApp.Models
 
         [ForeignKey("Stations_IdStations")]
         public virtual stations stations { get; set; }
+
+        public virtual int NumberofStation { get; set; }
     }
 }

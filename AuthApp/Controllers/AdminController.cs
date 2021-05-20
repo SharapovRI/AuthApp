@@ -1,4 +1,5 @@
 ﻿using AuthApp.Models;
+using AuthApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,7 +25,7 @@ namespace AuthApp.Controllers
             {
                 item.posts = db.posts.FirstOrDefault(e => e.idPosts == item.PostId);
             }
-            
+
             db.flights.Load();
             db.flights_has_stations.Load();
             db.flights_has_traveltime.Load();
@@ -55,20 +56,16 @@ namespace AuthApp.Controllers
         public List<InfoAboutFlight> GetInfoAboutFlight(flights flight)
         {
             List<InfoAboutFlight> infoAboutFlights = new List<InfoAboutFlight>();
-            List<traveltime> listOfTimes = db.flights_has_traveltime.Where(e => e.Flights_idFlights == flight.idFlights).Select(e => e.traveltime).ToList();
-            List<stations> listOfStations = db.flights_has_stations.Where(e => e.Flights_idFlights == flight.idFlights).Select(e => e.stations).ToList();
-            foreach (var item in listOfTimes)
-            {
-                infoAboutFlights.Add(new InfoAboutFlight(flight.idFlights, listOfStations.First().Name, listOfStations.Last().Name, item.ArrivalTime, item.DepartureTime, flight));
-            }
+            List<stations> listOfStations = db.flights_has_stations.OrderBy(e => e.NumberofStation).Where(e => e.Flights_idFlights == flight.idFlights).Select(e => e.stations).ToList();
+            infoAboutFlights.Add(new InfoAboutFlight(flight.idFlights, listOfStations.First().Name, listOfStations.Last().Name, flight, flight.RouteId));
 
             return infoAboutFlights;
         }
 
         [HttpGet]
-        public IActionResult EditFlight(int? flightID) 
-        {                   
-           if (flightID == null) 
+        public IActionResult EditFlight(int? flightID)
+        {
+            if (flightID == null)
                 return RedirectToAction("Index");
             var flight = db.flights.FirstOrDefault(fl => fl.idFlights == flightID);
             //flight.flightcrews = db.flightcrews.FirstOrDefault(e => e.idFlightCrews == flight.FlightCrewId);
@@ -76,7 +73,16 @@ namespace AuthApp.Controllers
             //flight.flightcrews.navigators = db.navigators.FirstOrDefault(e => e.idNavigators == flight.flightcrews.NavigatorId);
             //flight.flightcrews.radiooperators = db.radiooperators.FirstOrDefault(e => e.idRadioOperators == flight.flightcrews.RadioOperatorId);
             //flight.flightcrews.flightattendants = db.flightattendants.FirstOrDefault(e => e.idFlightAttendants == flight.flightcrews.FlightAttendantsId);
-            return View(flight); 
+            return View(flight);
+        }
+
+
+        public async Task<IActionResult> DeleteFlight(int flightID)
+        {
+            flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
+            db.flights.Remove(flight);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         public IActionResult DetailsStations(int id)
@@ -99,7 +105,7 @@ namespace AuthApp.Controllers
             return View(freeCrews);
         }
 
-        
+
         public async Task<IActionResult> SaveChangedCrew(int crewID, int flightID)
         {
             flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
@@ -143,9 +149,57 @@ namespace AuthApp.Controllers
         public IActionResult AddStation(int stationID, int flightID)
         {
             flights flight = db.flights.FirstOrDefault(e => e.idFlights == flightID);
-            db.flights_has_stations.Add(new flights_has_stations { Flights_idFlights = flightID, Stations_IdStations = stationID });
+            int lastStation = flight.flights_has_stations.Max(e => e.NumberofStation);
+            db.flights_has_stations.Add(new flights_has_stations { Flights_idFlights = flightID, Stations_IdStations = stationID, NumberofStation = lastStation + 1 });
             db.SaveChanges();
             return RedirectToAction("EditRoute", new { flightID = flightID });
+        }
+
+        ////////////////////Time
+        ///
+        public IActionResult EditTravelTime(int timeID, int flightID)
+        {
+            traveltime traveltime = db.traveltime.FirstOrDefault(e => e.idTravelTime == timeID);
+            ViewBag.TravelTime = traveltime;
+            ViewBag.FlightID = flightID;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveTime(EditTravelTimeModel model, int flightID)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.ID != 0)
+                {
+                    traveltime traveltime = db.traveltime.FirstOrDefault(e => e.idTravelTime == model.ID);
+                    traveltime.ArrivalTime = model.ArrTime;
+                    traveltime.DepartureTime = model.DepTime;
+                    db.traveltime.Update(traveltime);
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    traveltime traveltime = new traveltime() { ArrivalTime = model.ArrTime, DepartureTime = model.DepTime, Flights_idFlights = flightID };
+                    db.traveltime.Add(traveltime);
+                    await db.SaveChangesAsync();
+                }
+            }
+            return RedirectToAction("EditFlight", new { flightID = flightID });
+        }
+
+        public IActionResult AddTravelTime(int flightID)
+        {
+            ViewBag.FlightID = flightID;
+            return View();
+        }
+        public IActionResult DeleteTravelTime(int timeID, int flightID)
+        {
+            traveltime traveltime = db.traveltime.FirstOrDefault(e => e.idTravelTime == timeID);
+            db.traveltime.Remove(traveltime);
+            db.SaveChanges();
+            return RedirectToAction("EditFlight", new { flightID = flightID });
         }
     }
 }

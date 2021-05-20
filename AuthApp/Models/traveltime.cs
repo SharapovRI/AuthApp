@@ -12,7 +12,7 @@ namespace AuthApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public traveltime()
         {
-            flights_has_traveltime = new HashSet<flights_has_traveltime>();
+            //flights_has_traveltime = new HashSet<flights_has_traveltime>();
         }
 
         [Key]
@@ -23,6 +23,10 @@ namespace AuthApp.Models
         public DateTime DepartureTime { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<flights_has_traveltime> flights_has_traveltime { get; set; }
+
+        public int Flights_idFlights { get; set; }
+
+        [ForeignKey("Flights_idFlights")]
+        public virtual flights flight { get; set; }
     }
 }

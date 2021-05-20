@@ -9,6 +9,8 @@ namespace AuthApp.Models
     {
         public int ID { get; private set; }
 
+        public int Route { get; private set; }
+
         public string From { get; private set; }
 
         public string To { get; private set; }
@@ -23,16 +25,13 @@ namespace AuthApp.Models
 
         public flights Flight { get; private set; }
 
-        public InfoAboutFlight(int id, string from, string to, DateTime arrTime, DateTime depTime, flights flight)
+        public InfoAboutFlight(int id, string from, string to, flights flight, int route)
         {
             ID = id;
             From = from;
             To = to;
-            ArrDate = arrTime.ToShortDateString();
-            DepDate = arrTime.ToShortDateString();
-            ArrivalTime = arrTime.ToShortTimeString();
-            DepartureTime = depTime.ToShortTimeString();
             Flight = flight;
+            Route = route;
         }
     }
 }

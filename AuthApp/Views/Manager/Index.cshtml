@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<AuthApp.Models.flightcrews>
 @{
     //ViewData["Title"] = "Product list";
-    //Layout = null;
+}
+
+@section Logout {
+    <li class="navbar-brand"><a asp-controller="Account" asp-action="Logout">Logout</a></li>
 }
 <!DOCTYPE html>
 <html>

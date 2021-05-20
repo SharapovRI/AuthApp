@@ -62,8 +62,8 @@ namespace AuthApp.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<flights>()
-                .HasMany(e => e.flights_has_traveltime)
-                .WithOne(e => e.flights)
+                .HasMany(e => e.traveltimes)
+                .WithOne(e => e.flight)
                 .HasForeignKey(e => e.Flights_idFlights)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -126,21 +126,21 @@ namespace AuthApp.Models
                 .HasForeignKey(e => e.Stations_IdStations)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<traveltime>()
+            /*modelBuilder.Entity<traveltime>()
                 .HasMany(e => e.flights_has_traveltime)
                 .WithOne(e => e.traveltime)
                 .HasForeignKey(e => e.TravelTime_idTravelTime)
+                .OnDelete(DeleteBehavior.Cascade);*/
+
+            modelBuilder.Entity<traveltime>()
+                .HasOne(e => e.flight)
+                .WithMany(e => e.traveltimes)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<flights_has_traveltime>()
-                .HasOne(e => e.flights)
-                .WithMany(e => e.flights_has_traveltime)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<flights_has_traveltime>()
+            /*modelBuilder.Entity<flights_has_traveltime>()
                 .HasOne(e => e.traveltime)
                 .WithMany(e => e.flights_has_traveltime)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);*/
 
             modelBuilder.Entity<flights_has_stations>()
                 .HasOne(e => e.flights)

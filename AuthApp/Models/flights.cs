@@ -13,13 +13,13 @@ namespace AuthApp.Models
         public flights()
         {
             flights_has_stations = new HashSet<flights_has_stations>();
-            flights_has_traveltime = new HashSet<flights_has_traveltime>();
+            traveltimes = new HashSet<traveltime>();
         }
 
         [Key]
         public int idFlights { get; set; }
 
-        public int TravelTimeId { get; set; }
+        public int? TravelTimeId { get; set; }
 
         public int? FlightCrewId { get; set; }
 
@@ -32,6 +32,6 @@ namespace AuthApp.Models
         public virtual ICollection<flights_has_stations> flights_has_stations { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<flights_has_traveltime> flights_has_traveltime { get; set; }
+        public virtual ICollection<traveltime> traveltimes { get; set; }
     }
 }

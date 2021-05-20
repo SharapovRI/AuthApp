@@ -1,6 +1,8 @@
 ﻿@model AuthApp.ViewModels.AddNewEmployeeModel
 @using AuthApp.ViewModels
- 
+@section Logout {
+    <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+}
 <h2>Adding new employee</h2>
 
 <form asp-action="Adding" asp-controller="Manager" asp-anti-forgery="true">
