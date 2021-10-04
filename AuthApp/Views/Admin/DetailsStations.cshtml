@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
         <h4>List of stations:</h4>
-        <table>
+        <table class="table table-sm">
             @foreach (var product in Model.flights_has_stations.OrderBy(e => e.NumberofStation).Select(e => e.stations))
             {
                 <tr>

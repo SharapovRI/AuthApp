@@ -1,5 +1,6 @@
 ﻿using AuthApp.Models;
 using AuthApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace AuthApp.Controllers
 {
+    [Authorize(Roles = "2")]
     public class AdminController : Controller
     {
         Model1 db;
@@ -57,9 +59,22 @@ namespace AuthApp.Controllers
         {
             List<InfoAboutFlight> infoAboutFlights = new List<InfoAboutFlight>();
             List<stations> listOfStations = db.flights_has_stations.OrderBy(e => e.NumberofStation).Where(e => e.Flights_idFlights == flight.idFlights).Select(e => e.stations).ToList();
-            infoAboutFlights.Add(new InfoAboutFlight(flight.idFlights, listOfStations.First().Name, listOfStations.Last().Name, flight, flight.RouteId));
+            if (listOfStations.Count > 0)
+            {
+                infoAboutFlights.Add(new InfoAboutFlight(flight.idFlights, listOfStations.First().Name, listOfStations.Last().Name, flight, flight.RouteId));
 
-            return infoAboutFlights;
+                return infoAboutFlights;
+            }
+            else
+            {
+                infoAboutFlights.Add(new InfoAboutFlight(flight.idFlights, "", "", flight, flight.RouteId));
+                return infoAboutFlights;
+            }
+        }
+
+        public IActionResult AddFlight()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -74,6 +89,23 @@ namespace AuthApp.Controllers
             //flight.flightcrews.radiooperators = db.radiooperators.FirstOrDefault(e => e.idRadioOperators == flight.flightcrews.RadioOperatorId);
             //flight.flightcrews.flightattendants = db.flightattendants.FirstOrDefault(e => e.idFlightAttendants == flight.flightcrews.FlightAttendantsId);
             return View(flight);
+        }
+
+        public async Task<IActionResult> SaveFlight(int ID)
+        {
+            flights flightsRouted = db.flights.FirstOrDefault(e => e.RouteId == ID);
+            if (flightsRouted == null)
+            {
+                flights flight = new flights { RouteId = ID };
+                db.flights.Add(flight);
+                await db.SaveChangesAsync();
+                int flightID = ID;
+                return RedirectToAction("EditFlight", new { flightID = db.flights.FirstOrDefault(e => e.RouteId == ID).idFlights });
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
 

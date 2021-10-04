@@ -1,5 +1,6 @@
 ﻿using AuthApp.Models;
 using AuthApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AuthApp.Controllers
 {
+    [Authorize(Roles = "1")]
     public class ManagerController : Controller
     {
         Model1 db;

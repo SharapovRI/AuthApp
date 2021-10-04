@@ -1,0 +1,24 @@
+﻿@section Logout {
+    <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adding flight</title>
+</head>
+<body>
+    <h3>Add flight</h3>
+    <form asp-action="SaveFlight" asp-controller="Admin" asp-anti-forgery="true">
+        <label>Input number of route:</label>
+            <input type="number" name="ID"/>
+        
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-outline-dark" />
+        </div>
+    </form>
+    <div>
+        <a asp-controller="Admin" asp-action="Index">Back</a>
+    </div>
+</body>
+</html>
